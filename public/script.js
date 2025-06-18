@@ -1,36 +1,36 @@
 /*
-* ===================================================================================
-* SCRIPT DO TELÃO INTERATIVO - POKÉDEX COMUNITÁRIA UNILAVRAS
-* ===================================================================================
-*
-* Olá! Este arquivo é o "cérebro" da PÁGINA WEB. Ele é o código que roda
-* diretamente no navegador de quem está assistindo ao telão e é responsável
-* por toda a interatividade e pelas animações que você vê.
-*
-* Suas principais responsabilidades são:
-*
-* 1.  DESENHAR A GRADE INICIAL: Ele cria os 151 cards de Pokémon na tela,
-* mostrando-os inicialmente como silhuetas escuras.
-*
-* 2.  CONECTAR-SE AO SERVIDOR: Ele abre um "rádio" de comunicação em tempo real
-* (usando WebSocket) para ouvir os "anúncios" que o servidor (`server.js`) envia.
-*
-* 3.  SINCRONIZAR O ESTADO: Assim que se conecta, a primeira coisa que ele faz é
-* receber uma mensagem do servidor com a lista de todos os Pokémon que já foram
-* capturados. Ele usa essa lista para virar os cards corretos e deixar a
-* grade atualizada.
-*
-* 4.  REAGIR AOS ANÚNCIOS: Ele fica constantemente "ouvindo". Quando o servidor
-* anuncia uma nova captura, este script entra em ação para:
-* - Disparar a animação de destaque no meio da tela.
-* - Tocar o som característico daquele Pokémon.
-* - Virar o card correspondente na grade para revelar a imagem colorida.
-*
-* 5.  GERENCIAR O PAINEL DE ADMINISTRAÇÃO: Ele controla o botão de engrenagem,
-* que pede uma senha e, se a senha estiver correta, se comunica com o
-* servidor para exibir os botões de teste (Zerar, Completar, etc.).
-*
-*/
+ * ===================================================================================
+ * SCRIPT DO TELÃO INTERATIVO - POKÉDEX COMUNITÁRIA UNILAVRAS
+ * ===================================================================================
+ *
+ * Olá! Este arquivo é o "cérebro" da PÁGINA WEB. Ele é o código que roda
+ * diretamente no navegador de quem está assistindo ao telão e é responsável
+ * por toda a interatividade e pelas animações que você vê.
+ *
+ * Suas principais responsabilidades são:
+ *
+ * 1.  DESENHAR A GRADE INICIAL: Ele cria os 151 cards de Pokémon na tela,
+ * mostrando-os inicialmente como silhuetas escuras.
+ *
+ * 2.  CONECTAR-SE AO SERVIDOR: Ele abre um "rádio" de comunicação em tempo real
+ * (usando WebSocket) para ouvir os "anúncios" que o servidor (`server.js`) envia.
+ *
+ * 3.  SINCRONIZAR O ESTADO: Assim que se conecta, a primeira coisa que ele faz é
+ * receber uma mensagem do servidor com a lista de todos os Pokémon que já foram
+ * capturados. Ele usa essa lista para virar os cards corretos e deixar a
+ * grade atualizada.
+ *
+ * 4.  REAGIR AOS ANÚNCIOS: Ele fica constantemente "ouvindo". Quando o servidor
+ * anuncia uma nova captura, este script entra em ação para:
+ * - Disparar a animação de destaque no meio da tela.
+ * - Tocar o som característico daquele Pokémon.
+ * - Virar o card correspondente na grade para revelar a imagem colorida.
+ *
+ * 5.  GERENCIAR O PAINEL DE ADMINISTRAÇÃO: Ele controla o botão de engrenagem,
+ * que pede uma senha e, se a senha estiver correta, se comunica com o
+ * servidor para exibir os botões de teste (Zerar, Completar, etc.).
+ *
+ */
 
 // Espera a página HTML ser totalmente carregada antes de executar qualquer código.
 // É uma boa prática para garantir que todos os elementos da tela já existam.
@@ -56,15 +56,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const startOverlay = document.getElementById('start-overlay');
     const startButton = document.getElementById('start-button');
     const toggleScrollButton = document.getElementById('toggle-scroll-button');
-    
+
     // Constantes do jogo: definem as regras básicas da nossa Pokédex.
     const totalPokemon = 151; // O total de Pokémon da primeira geração.
 
     // Variáveis de estado: guardam informações que mudam durante o uso.
     let capturedCount = 0; // Armazena quantos Pokémon já foram capturados.
-    let isMuted = false;   // Controla se o som está ligado ou desligado.
+    let isMuted = false; // Controla se o som está ligado ou desligado.
     let isAutoScrollEnabled = false; // Controla se a rolagem automática está habilitada.
-    let completionMusic;   // Guarda a música de vitória para podermos pará-la depois.
+    let completionMusic; // Guarda a música de vitória para podermos pará-la depois.
     let autoScrollTimeout = null; // Controla o timer da rolagem automática.
     let restartScrollTimeout = null; // Controla o timer para reiniciar o scroll.
 
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function initialize() {
         // Prepara a tela de início para aguardar a interação do usuário.
         setupStartScreen();
-        
+
         // Prepara todos os botões da interface para serem clicáveis.
         setupMuteButton();
         setupAutoScrollToggleButton();
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Inicia a conexão em tempo real com o servidor.
         connectWebSocket();
-        
+
         console.log(`Aplicação iniciada. Aguardando interação do usuário para iniciar a experiência completa.`);
     }
 
@@ -111,11 +111,13 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 startOverlay.style.display = 'none';
             }, 500); // Espera a animação de fade-out terminar.
-            
+
             console.log("Experiência iniciada pelo usuário!");
-        }, { once: true }); // O evento só precisa ser disparado uma vez.
+        }, {
+            once: true
+        }); // O evento só precisa ser disparado uma vez.
     }
-    
+
     /**
      * Configura o botão de Ligar/Desligar o som.
      */
@@ -178,25 +180,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (secret) {
                     // ...usa a API `fetch` para enviar a senha para a rota de verificação no servidor.
                     fetch('/admin/verify', {
-                        method: 'POST', // O método é POST para enviar dados no corpo.
-                        headers: { 'Content-Type': 'application/json' }, // Avisa que estamos enviando dados em formato JSON.
-                        body: JSON.stringify({ secret: secret }), // Converte nosso objeto com a senha para texto JSON.
-                    })
-                    .then(response => {
-                        // A propriedade 'ok' do objeto de resposta é verdadeira se o status HTTP for de sucesso (como 200).
-                        if (response.ok) {
-                            // Se a senha estiver correta (servidor respondeu com sucesso), mostra o painel de testes.
-                            testControls.style.display = 'block';
-                        } else {
-                            // Se a senha estiver errada (servidor respondeu com erro), avisa o usuário.
-                            alert('Acesso negado. Senha incorreta.');
-                        }
-                    })
-                    .catch(err => {
-                        // Se houver um erro de rede, avisa no console e na tela.
-                        console.error('Erro ao verificar a senha:', err);
-                        alert('Erro de comunicação com o servidor.');
-                    });
+                            method: 'POST', // O método é POST para enviar dados no corpo.
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }, // Avisa que estamos enviando dados em formato JSON.
+                            body: JSON.stringify({
+                                secret: secret
+                            }), // Converte nosso objeto com a senha para texto JSON.
+                        })
+                        .then(response => {
+                            // A propriedade 'ok' do objeto de resposta é verdadeira se o status HTTP for de sucesso (como 200).
+                            if (response.ok) {
+                                // Se a senha estiver correta (servidor respondeu com sucesso), mostra o painel de testes.
+                                testControls.style.display = 'block';
+                            } else {
+                                // Se a senha estiver errada (servidor respondeu com erro), avisa o usuário.
+                                alert('Acesso negado. Senha incorreta.');
+                            }
+                        })
+                        .catch(err => {
+                            // Se houver um erro de rede, avisa no console e na tela.
+                            console.error('Erro ao verificar a senha:', err);
+                            alert('Erro de comunicação com o servidor.');
+                        });
                 }
             });
         }
@@ -240,9 +246,30 @@ document.addEventListener('DOMContentLoaded', () => {
             card.querySelector('.pokemon-id').textContent = `#${i.toString().padStart(3, '0')}`;
             // Adiciona o card pronto na grade da tela.
             grid.appendChild(card);
+
+            // Adiciona um "ouvinte" de clique ao card.
+            // Isso faz com que, quando o usuário clicar no card, o código dentro da função seja executado.
+            card.addEventListener('click', () => {
+
+                // Pega o ID do Pokémon que está armazenado no atributo data-id do card.
+                // Esse ID é um número (por isso usamos parseInt para converter de texto para número).
+                const pokemonId = parseInt(card.dataset.id);
+
+                // Verifica se esse card já foi "capturado".
+                // Isso é feito verificando se ele tem a classe CSS "captured".
+                // Somente os cards com essa classe devem tocar o som.
+                if (card.classList.contains('captured')) {
+
+                    // Chama a função que toca o "grito" do Pokémon, passando o ID dele.
+                    playPokemonCry(pokemonId);
+                }
+
+                // Se o card ainda não foi capturado (não tem a classe "captured"), nada acontece.
+            });
+
         }
     }
-    
+
     /**
      * Atualiza o placar "Capturados: X de 151" na tela.
      */
@@ -260,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function connectWebSocket() {
         console.log('Iniciando conexão WebSocket...');
-        
+
         // Descobre o endereço do servidor para se conectar.
         const host = window.location.host;
         const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'; // wss para https, ws para http.
@@ -275,7 +302,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Envia um "ping" a cada 25 segundos para avisar o servidor que ainda estamos aqui.
             pingInterval = setInterval(() => {
                 if (ws.readyState === WebSocket.OPEN) {
-                    ws.send(JSON.stringify({ type: 'ping' }));
+                    ws.send(JSON.stringify({
+                        type: 'ping'
+                    }));
                 }
             }, 25000);
         };
@@ -286,12 +315,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = JSON.parse(event.data); // Tenta ler a mensagem.
 
                 // Usa um 'switch' para decidir o que fazer com base no 'tipo' da mensagem.
-                switch(data.type) {
+                switch (data.type) {
                     // Se for um 'pong' (resposta ao nosso 'ping'), apenas ignora.
                     case 'pong':
                         break;
-                    
-                    // Se for o 'estado inicial', sincroniza a grade.
+
+                        // Se for o 'estado inicial', sincroniza a grade.
                     case 'initial_state':
                         console.log('Estado inicial recebido do servidor.', data.captured);
                         capturedCount = 0; // Zera o contador local.
@@ -316,8 +345,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             triggerPokedexCompletionCelebration();
                         }
                         break;
-                    
-                    // Se não for nenhum dos tipos acima, assume que é uma ação de captura.
+
+                        // Se não for nenhum dos tipos acima, assume que é uma ação de captura.
                     default:
                         handlePokemonAction(data);
                         break;
@@ -340,10 +369,10 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(pingInterval);
         };
     }
-    
+
 
     // --- SEÇÃO 5: EFEITOS VISUAIS E SONOROS ---
-    
+
     /**
      * Toca o "grito" característico de um Pokémon.
      * @param {number} pokemonId - O ID do Pokémon para tocar o som.
@@ -372,14 +401,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 10000);
     }
-    
+
     /**
      * Cria e controla a animação de destaque que aparece no meio do telão.
      */
     function showHighlightAnimation(id, name, originalCard, bannerText) {
         // Pega a posição e tamanho do card original na grade.
         const rect = originalCard.getBoundingClientRect();
-        
+
         // Cria os elementos HTML da animação dinamicamente.
         const highlightNode = document.createElement('div');
         highlightNode.className = 'pokemon-highlight';
@@ -391,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Posiciona o clone da animação exatamente sobre o card original.
         highlightNode.style.cssText = `width: ${rect.width}px; height: ${rect.height}px; top: ${rect.top}px; left: ${rect.left}px; transform: scale(1);`;
-        
+
         // Adiciona os elementos de animação na página.
         document.body.appendChild(highlightNode);
         document.body.appendChild(bannerNode);
@@ -411,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nameNode.className = 'pokemon-name-separate';
         nameNode.textContent = name;
         document.body.appendChild(nameNode);
-        
+
         setTimeout(() => {
             nameNode.style.opacity = '1';
             nameNode.style.transform = 'translate(-50%, 0)';
@@ -448,22 +477,47 @@ document.addEventListener('DOMContentLoaded', () => {
         completionBanner.classList.remove('hidden');
         // Faz uma "onda" de animação em todos os cards.
         document.querySelectorAll('.pokemon-card').forEach((card, index) => {
-            setTimeout(() => { card.classList.add('wave-animate'); }, index * 15);
+            setTimeout(() => {
+                card.classList.add('wave-animate');
+            }, index * 15);
         });
         // Lança confetes!
         launchConfetti();
     }
-    
+
     /**
      * Dispara o efeito de confetes na tela.
      */
     function launchConfetti() {
         if (typeof confetti !== 'function') return; // Verifica se a biblioteca de confete existe.
         const colors = ['#009DE0', '#FFFFFF', '#021D34']; // Cores personalizadas.
-        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: colors });
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: {
+                y: 0.6
+            },
+            colors: colors
+        });
         setTimeout(() => {
-            confetti({ particleCount: 150, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
-            confetti({ particleCount: 150, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
+            confetti({
+                particleCount: 150,
+                angle: 60,
+                spread: 55,
+                origin: {
+                    x: 0
+                },
+                colors: colors
+            });
+            confetti({
+                particleCount: 150,
+                angle: 120,
+                spread: 55,
+                origin: {
+                    x: 1
+                },
+                colors: colors
+            });
         }, 400);
     }
 
@@ -485,7 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isNewCapture) {
             showHighlightAnimation(data.id, data.name, targetCard, 'Novo Pokémon Capturado!');
-            
+
             // Verifica se o card já não foi revelado, para evitar recontagens se a mesma mensagem chegar duas vezes.
             if (!targetCard.classList.contains('captured')) {
                 setTimeout(() => {
@@ -494,7 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     targetCard.classList.add('captured');
                     capturedCount++;
                     updateCounter();
-                    
+
                     if (capturedCount === totalPokemon) {
                         triggerPokedexCompletionCelebration();
                     }
@@ -505,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showHighlightAnimation(data.id, data.name, targetCard, 'Captura Duplicada!');
         }
     }
-    
+
 
     // --- SEÇÃO 7: LÓGICA DE TESTE E BANCO DE DADOS INTERNO ---
 
@@ -528,17 +582,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const id = parseInt(randomCard.dataset.id);
             const name = POKEMON_NAMES[id - 1];
             // Simula uma nova captura como se viesse do servidor.
-            handlePokemonAction({ id, name, action: 'new_capture' });
+            handlePokemonAction({
+                id,
+                name,
+                action: 'new_capture'
+            });
         });
 
         // Botão para simular uma captura DUPLICADA aleatória.
         testDuplicateButton.addEventListener('click', () => {
             const capturedCards = document.querySelectorAll('.pokemon-card.captured');
-            if (capturedCards.length === 0) { alert('Capture um Pokémon primeiro para testar a duplicata.'); return; }
+            if (capturedCards.length === 0) {
+                alert('Capture um Pokémon primeiro para testar a duplicata.');
+                return;
+            }
             const randomCapturedCard = capturedCards[Math.floor(Math.random() * capturedCards.length)];
             const id = parseInt(randomCapturedCard.dataset.id);
             const name = randomCapturedCard.querySelector('.pokemon-name').textContent;
-            handlePokemonAction({ id, name, action: 'duplicate_capture' });
+            handlePokemonAction({
+                id,
+                name,
+                action: 'duplicate_capture'
+            });
         });
 
         // Botão para ZERAR todo o progresso, enviando o comando ao servidor.
@@ -546,13 +611,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const secret = prompt('Esta ação vai zerar a Pokédex para TODOS. Digite a senha de administrador:');
             if (secret) {
                 fetch('/admin/reset', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ secret: secret }),
-                })
-                .then(response => response.text())
-                .then(message => alert(message))
-                .catch(err => alert('Ocorreu um erro de comunicação com o servidor.'));
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            secret: secret
+                        }),
+                    })
+                    .then(response => response.text())
+                    .then(message => alert(message))
+                    .catch(err => alert('Ocorreu um erro de comunicação com o servidor.'));
             }
         });
 
@@ -561,13 +630,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const secret = prompt('Esta ação vai completar a Pokédex para TODOS. Digite a senha de administrador:');
             if (secret) {
                 fetch('/admin/complete', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ secret: secret }),
-                })
-                .then(response => response.text())
-                .then(message => alert(message))
-                .catch(err => alert('Ocorreu um erro de comunicação com o servidor.'));
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            secret: secret
+                        }),
+                    })
+                    .then(response => response.text())
+                    .then(message => alert(message))
+                    .catch(err => alert('Ocorreu um erro de comunicação com o servidor.'));
             }
         });
     }
@@ -669,10 +742,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Qualquer clique, toque ou rolagem do mouse pausa a rolagem automática.
 
     // Detecta rolagem com a roda do mouse
-    window.addEventListener('wheel', handleUserInteraction, { passive: true });
+    window.addEventListener('wheel', handleUserInteraction, {
+        passive: true
+    });
 
     // Detecta toques em telas sensíveis (celulares/tablets)
-    window.addEventListener('touchstart', handleUserInteraction, { passive: true });
+    window.addEventListener('touchstart', handleUserInteraction, {
+        passive: true
+    });
 
     // Detecta cliques com o mouse
     window.addEventListener('mousedown', handleUserInteraction);

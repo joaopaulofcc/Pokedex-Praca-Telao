@@ -164,4 +164,4 @@ Este projeto só foi possível graças aos incríveis recursos disponibilizados 
 
 Este projeto, em conjunto com o [**Pokedex-Praca-Chat**](https://github.com/joaopaulofcc/Pokedex-Praca-Chat), é uma vitrine do curso de **Análise e Desenvolvimento de Sistemas do Unilavras**, criado especialmente para apresentação no evento **Unilavras na Praça 2025**. Ele demonstra a criação de uma aplicação full-stack interativa e o potencial dos nossos futuros desenvolvedores.
 
-> **Venha para o ADS e transforme suas ideias em realidade!**
+> **Venha fazer ADS e transforme suas ideias em realidade!**

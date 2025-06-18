@@ -1,0 +1,599 @@
+/**
+ * ===================================================================================
+ * ARQUIVO DE ESTILO (CSS) - POKÉDEX COMUNITÁRIA UNILAVRAS
+ * -----------------------------------------------------------------------------------
+ * Olá! Bem-vindo(a) ao nosso arquivo de estilos.
+ *
+ * O que é CSS?
+ * Pense no arquivo HTML como o "esqueleto" da nossa página e no JavaScript como o
+ * "cérebro" que controla as ações. O CSS, este arquivo aqui, é o "diretor de arte":
+ * ele cuida de toda a parte visual, como um estilista, um cenógrafo e um coreógrafo,
+ * tudo em um só. Ele define as cores, as fontes, os tamanhos, as posições e, o mais
+ * importante, as ANIMAÇÕES que tornam a experiência viva e divertida.
+ *
+ * Cada bloco de código abaixo é uma "instrução de estilo" para um elemento específico
+ * da nossa página. Vamos explorar!
+ * ===================================================================================
+ */
+
+/* --- SEÇÃO 1: FUNDAÇÃO E PALETA DE CORES --- */
+
+/* Esta linha é como dizer ao navegador: "Ei, antes de mais nada, vá na internet
+   e baixe esta fonte especial chamada 'Roboto' do Google, porque vamos usá-la". */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+
+/* ':root' se refere ao elemento raiz da página (o próprio documento HTML).
+   Usamos ele para criar uma "paleta de cores" central com variáveis.
+   É como dar um apelido para cada cor, para podermos reutilizá-las facilmente. */
+:root {
+    /* Criamos a variável '--unilavras-cyan' e damos a ela o valor da cor azul do Unilavras. */
+    --unilavras-cyan: #009DE0;
+    /* Criamos a variável '--unilavras-dark-blue' com o valor do azul escuro. */
+    --unilavras-dark-blue: #021D34;
+    /* Criamos a variável '--unilavras-text' com o valor da cor branca. */
+    --unilavras-text: #FFFFFF;
+    /* Criamos a variável '--card-background' com o valor de um cinza claro para o fundo dos cards. */
+    --card-background: #f0f0f0;
+}
+
+
+/* --- SEÇÃO 2: ESTILOS GERAIS DA PÁGINA --- */
+
+/* Estilo para o corpo (body) da página, o "chão" de todo o site.
+   Regras aqui afetam a página inteira como um todo. */
+body {
+    /* Define a família de fontes a ser usada no texto. Começa com 'Roboto', se falhar, tenta Arial. */
+    font-family: 'Roboto', Arial, sans-serif;
+    /* Define a cor do fundo, usando nossa variável de azul escuro. */
+    background-color: var(--unilavras-dark-blue);
+    /* Define a cor padrão para todos os textos, usando nossa variável de branco. */
+    color: var(--unilavras-text);
+    /* Alinha a maioria dos textos da página ao centro. */
+    text-align: center;
+    /* Remove a margem padrão que os navegadores colocam ao redor da página. */
+    margin: 0;
+    /* Adiciona um espaço interno de 20 pixels nas bordas da página. */
+    padding: 20px;
+    /* Impede que o usuário possa selecionar o texto da página com o mouse. */
+    user-select: none;
+    /* Garante que a página sempre ocupe, no mínimo, a altura total da tela. */
+    min-height: 100vh;
+    /* Faz com que o padding e a borda sejam incluídos no cálculo total do tamanho do elemento. */
+    box-sizing: border-box;
+    /* Quando a cor de fundo mudar, a transição será uma animação suave de 1 segundo. */
+    transition: background 1s ease-in-out;
+}
+
+/* Estiliza o título principal do site (a tag <h1> no HTML). */
+h1 {
+    /* Define a cor do texto do título, usando nossa variável de azul ciano. */
+    color: var(--unilavras-cyan);
+    /* Adiciona uma sombra sutil ao texto para dar um efeito de profundidade e melhorar a leitura. */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    /* Define o tamanho da fonte, tornando-a 2.5 vezes maior que o texto normal. */
+    font-size: 2.5em;
+    /* Adiciona um espaço de 10 pixels abaixo do título. */
+    margin-bottom: 10px;
+    /* Cria uma animação suave para qualquer mudança de estilo no título. */
+    transition: all 1s ease-in-out;
+}
+
+
+/* --- SEÇÃO 3: ELEMENTOS DA INTERFACE (CONTADOR E BOTÕES) --- */
+
+#start-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--unilavras-dark-blue);
+    /* Um z-index muito alto para garantir que fique sobre tudo */
+    z-index: 100000; 
+    /* Centraliza o conteúdo (o botão) vertical e horizontalmente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Para a animação de fade-out */
+    transition: opacity 0.5s ease-in-out;
+    /* Garante que não haja barras de rolagem estranhas */
+    overflow: hidden;
+}
+
+#start-button {
+    padding: 20px 40px;
+    font-size: 2em;
+    font-weight: bold;
+    font-family: 'Roboto', Arial, sans-serif;
+    color: var(--unilavras-dark-blue);
+    background-color: var(--unilavras-cyan);
+    border: 3px solid white;
+    border-radius: 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    /* Efeito de sombra para destacar */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+#start-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 157, 224, 0.5);
+}
+
+/* Estiliza o placar "Capturados: X de 151". */
+#pokedex-counter {
+    /* Define o tamanho da fonte do contador. */
+    font-size: 1.5em;
+    /* Define a cor do texto do contador. */
+    color: var(--unilavras-text);
+    /* Adiciona um espaço de 20 pixels abaixo do contador. */
+    margin-bottom: 20px;
+    /* Deixa o texto em negrito. */
+    font-weight: bold;
+}
+
+/* Estiliza especificamente os NÚMEROS dentro do contador. */
+#pokedex-counter span {
+    /* Define a cor do texto dos números. */
+    color: var(--unilavras-dark-blue);
+    /* Define uma cor de fundo para destacar os números. */
+    background-color: var(--unilavras-cyan);
+    /* Adiciona um pequeno espaço interno ao redor dos números. */
+    padding: 2px 8px;
+    /* Arredonda os cantos do destaque. */
+    border-radius: 5px;
+}
+
+/* Estiliza a área dos botões de teste do desenvolvedor. */
+.test-controls {
+    /* Por padrão, esta área começa escondida. */
+    display: none;
+    /* Adiciona um espaço abaixo da área de botões. */
+    margin-bottom: 20px;
+}
+
+/* Estiliza cada botão dentro da área de testes. */
+.test-controls button {
+    /* Define o espaço interno dos botões. */
+    padding: 10px 15px;
+    /* Define o tamanho do texto dos botões. */
+    font-size: 16px;
+    /* Deixa o texto em negrito. */
+    font-weight: bold;
+    /* Muda o cursor do mouse para uma "mãozinha" ao passar por cima. */
+    cursor: pointer;
+    /* Define o espaço entre os botões. */
+    margin: 0 10px;
+    /* Arredonda os cantos dos botões. */
+    border-radius: 8px;
+    /* Define uma borda azul. */
+    border: 2px solid var(--unilavras-cyan);
+    /* Deixa o fundo transparente. */
+    background-color: transparent;
+    /* Define a cor do texto como azul. */
+    color: var(--unilavras-cyan);
+    /* Cria uma animação suave para todas as mudanças de estilo. */
+    transition: all 0.2s ease-in-out;
+}
+
+/* Efeito visual para quando o mouse passa por cima dos botões de teste. */
+.test-controls button:hover {
+    /* Move o botão 2 pixels para cima, criando um efeito de "saltar". */
+    transform: translateY(-2px);
+    /* Muda o fundo para azul. */
+    background-color: var(--unilavras-cyan);
+    /* Muda o texto para branco. */
+    color: var(--unilavras-text);
+}
+
+/* Estilos especiais para botões de "perigo" (vermelho) e "sucesso" (verde). */
+.test-controls button.danger { background-color: #c72c41; border-color: #c72c41; color: white; }
+.test-controls button.danger:hover { background-color: white; color: #c72c41; }
+.test-controls button.success { background-color: #2d8a64; border-color: #2d8a64; color: white; }
+.test-controls button.success:hover { background-color: white; color: #2d8a64; }
+
+
+/* Estiliza os botões redondos que ficam "flutuando" no canto da tela. */
+.corner-controls {
+    /* Fixa os botões na tela. Eles não se movem mesmo quando a página é rolada. */
+    position: fixed;
+    /* Define a distância do fundo. */
+    bottom: 20px;
+    /* Define a distância da direita. */
+    right: 20px;
+    /* Define a "camada". Um número alto garante que eles fiquem por cima de outros elementos. */
+    z-index: 9000;
+    /* Organiza os botões um ao lado do outro. */
+    display: flex;
+    /* Cria um espaço de 10px entre os botões. */
+    gap: 10px;
+}
+
+/* Estiliza cada botão redondo individualmente. */
+.corner-controls button {
+    /* Fundo azul semitransparente. */
+    background-color: rgba(2, 29, 52, 0.5);
+    /* Cor do ícone (emoji). */
+    color: white;
+    /* Borda branca. */
+    border: 2px solid white;
+    /* Define a largura. */
+    width: 50px;
+    /* Define a altura. */
+    height: 50px;
+    /* Deixa o botão perfeitamente redondo. */
+    border-radius: 50%;
+    /* Tamanho do ícone (emoji). */
+    font-size: 24px;
+    /* Cursor de "mãozinha". */
+    cursor: pointer;
+    /* Animação suave para mudanças. */
+    transition: all 0.2s ease-in-out;
+    /* Centraliza o ícone (emoji) perfeitamente no meio do círculo. */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Efeito visual para quando o mouse passa por cima dos botões de canto. */
+.corner-controls button:hover {
+    /* Muda a cor de fundo. */
+    background-color: var(--unilavras-cyan);
+    /* Aumenta um pouco o tamanho do botão, criando um efeito de "zoom". */
+    transform: scale(1.1);
+}
+
+/* Define os emojis para o botão de som. O JavaScript troca as classes 'unmuted' e 'muted'. */
+#mute-button::before { font-size: 24px; } /* Define o tamanho do emoji. */
+#mute-button.unmuted::before { content: '🔊'; } /* Mostra este emoji quando o som está ligado. */
+#mute-button.muted::before { content: '🔇'; }  /* Mostra este emoji quando o som está desligado. */
+#toggle-test-mode { font-size: 24px; }
+
+/* Define os emojis para o botão de auto-scroll. */
+#toggle-scroll-button::before { font-size: 24px; }
+#toggle-scroll-button.enabled::before { content: '⬇️'; }
+#toggle-scroll-button.disabled::before { content: '🚫'; }
+
+
+/* --- SEÇÃO 4: A GRADE E OS CARDS 3D DOS POKÉMON --- */
+
+/* Cria o "tabuleiro" onde os 151 cards são organizados. */
+#pokedex-grid {
+    /* Usa o sistema de 'grid' do CSS para alinhar os cards. */
+    display: grid;
+    /*
+     * MÁGICA DA RESPONSIVIDADE:
+     * auto-fit: Cria quantas colunas couberem na tela.
+     * minmax(90px, 1fr): Cada coluna terá no mínimo 90px, mas pode crescer (1fr) para preencher o espaço.
+     * Quando não couber mais uma coluna de 90px, ela automaticamente quebra para a linha de baixo.
+    */
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    /* Define um espaço pequeno entre cada card. */
+    gap: 1vw;
+    /* Adiciona um espaço interno nas bordas da grade. */
+    padding: 10px;
+    /* Define a largura máxima que a grade pode ter. */
+    max-width: 1800px;
+    /* Centraliza a grade na tela. */
+    margin: auto;
+    /* A altura não é mais fixa, permitindo que o conteúdo (linhas) cresça conforme necessário. */
+    min-height: calc(100vh - 200px);
+}
+
+
+/* -- O EFEITO DE VIRAR O CARD EM 3D -- */
+
+/* O contêiner de cada card. Prepara o "palco" para a animação 3D. */
+.pokemon-card {
+    /* Define a proporção do card (largura / altura). */
+    aspect-ratio: 2.5 / 3.5;
+    /* Define a profundidade da cena 3D. Essencial para o efeito de perspectiva. */
+    perspective: 1000px;
+    /* Fundo transparente, pois o que tem cor são as partes de dentro. */
+    background-color: transparent;
+    /* Cursor de "mãozinha". */
+    cursor: pointer;
+}
+
+/* A parte interna do card, que efetivamente gira em 3D. É o "ator" do nosso palco. */
+.card-inner {
+    /* Posicionado para ocupar todo o espaço do 'pokemon-card'. */
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* Define a duração e o tipo de aceleração da animação de giro. */
+    transition: transform 0.8s cubic-bezier(0.6, 0.04, 0.98, 0.34);
+    /* Habilita o espaço 3D para que os filhos (frente e verso) possam ser posicionados. */
+    transform-style: preserve-3d;
+}
+
+/* ESTA É A REGRA MÁGICA: quando o JavaScript adiciona a classe "captured" ao card,
+   esta regra é ativada e faz a parte de dentro (.card-inner) girar 180 graus no eixo Y. */
+.pokemon-card.captured .card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Estilos comuns para a FRENTE (silhueta) e o VERSO (imagem colorida) do card. */
+.card-front,
+.card-back {
+    /* Posiciona ambos, frente e verso, no mesmo lugar, um em cima do outro. */
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* Este é o truque do 3D: esconde o lado do card que não está virado para nós. */
+    backface-visibility: hidden;
+    /* Arredonda os cantos. */
+    border-radius: 10px;
+    /* Centraliza o conteúdo (silhueta ou imagem) dentro do card. */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* Adiciona uma sombra para dar profundidade. */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    /* Adiciona uma borda. */
+    border: 3px solid #011321;
+}
+
+/* Estilo específico da FRENTE do card. */
+.card-front {
+    /* Fundo azul escuro para a parte da silhueta. */
+    background-color: #04294a;
+}
+
+/* Estilo específico do VERSO do card. */
+.card-back {
+    /* Fundo cinza claro para a parte da imagem revelada. */
+    background: var(--card-background);
+    /* Começa já girado em 180 graus, ficando "de costas" e escondido. */
+    transform: rotateY(180deg);
+    /* Espaçamento interno para a imagem não colar nas bordas. */
+    padding: 8px;
+    /* Garante que o padding não aumente o tamanho total do card. */
+    box-sizing: border-box;
+}
+
+/* Estilos para as informações que ficam DENTRO dos cards. */
+.pokemon-id {
+    font-weight: bold; font-size: 1.2em; color: #556a7d;
+    position: absolute; top: 5px; left: 8px;
+}
+.pokemon-silhouette {
+    width: 90%; height: 90%;
+    object-fit: contain; /* Garante que a imagem caiba sem distorcer. */
+    filter: brightness(0); /* Deixa a imagem totalmente preta, criando o efeito de silhueta. */
+}
+.pokemon-img {
+    width: 100%; height: 100%;
+    border-radius: 7px;
+    object-fit: contain;
+}
+.pokemon-name {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    margin: 0; padding: 5px;
+    background-color: rgba(0, 0, 0, 0.6); /* Fundo preto semitransparente. */
+    color: white;
+    font-size: 0.9em; font-weight: bold; text-transform: capitalize;
+    border-bottom-left-radius: 7px; border-bottom-right-radius: 7px;
+    text-shadow: 1px 1px 2px black;
+}
+
+
+/* --- SEÇÃO 5: ANIMAÇÃO DE DESTAQUE DA CAPTURA --- */
+
+/* Esta seção inteira controla a animação que acontece quando um Pokémon é capturado. */
+.pokemon-highlight {
+    position: fixed; /* Fixo na tela, sobrepondo tudo. */
+    z-index: 9999; /* Camada muito alta para ficar na frente de tudo. */
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.5, 0, 0.5, 1), opacity 0.7s ease;
+    pointer-events: none; /* Impede que o usuário clique na animação. */
+    border-radius: 12px;
+    box-shadow: 0 0 50px 20px var(--unilavras-cyan); /* Efeito de brilho azul ao redor. */
+    opacity: 1;
+}
+/* Estilo do card durante a animação de destaque. */
+.pokemon-highlight .card-back {
+    transform: rotateY(0); /* Garante que ele esteja virado para frente. */
+    background: var(--card-background);
+    border-radius: 12px;
+    border: 3px solid var(--unilavras-cyan);
+    display: flex; flex-direction: column; justify-content: flex-start;
+    padding: 0; overflow: hidden;
+}
+.pokemon-highlight .pokemon-img {
+    width: 100%; flex-grow: 1; object-fit: contain; padding: 10px;
+    box-sizing: border-box; min-height: 0;
+}
+.pokemon-highlight .highlight-name { display: none; }
+
+/* Estilo do nome do Pokémon que aparece animado por baixo do card. */
+.pokemon-name-separate {
+    position: fixed; bottom: 15%; left: 50%;
+    transform: translate(-50%, 20px); /* Posição inicial. */
+    color: white; font-size: 4em; font-weight: 700;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+    opacity: 0; /* Começa invisível. */
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    z-index: 10001; /* Camada mais alta de todas. */
+    pointer-events: none;
+    text-transform: capitalize;
+}
+
+/* Estilo do banner "Novo Pokémon Capturado!" que desliza do topo. */
+.highlight-banner {
+    position: fixed; top: -150px; /* Começa fora da tela, no topo. */
+    left: 50%; transform: translateX(-50%);
+    z-index: 9998;
+    background: linear-gradient(45deg, var(--unilavras-cyan), #55c3ee);
+    color: var(--unilavras-dark-blue);
+    padding: 15px 40px; border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    font-size: 2.5em; font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+    opacity: 0; /* Começa invisível. */
+    transition: top 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
+/* --- SEÇÃO 6: EFEITOS DE FUNDO E CELEBRAÇÃO FINAL --- */
+
+/* Define as bolhas que flutuam suavemente no fundo da tela. */
+.background-shapes {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1; /* Garante que fiquem atrás de todo o conteúdo. */
+    overflow: hidden; /* Esconde as partes das bolhas que saem da tela. */
+}
+.background-shapes li {
+    position: absolute; display: block; list-style: none;
+    bottom: -150px; /* Começam fora da tela, embaixo. */
+    background: rgba(0, 157, 224, 0.2);
+    animation: float-up 25s linear infinite; /* Aplica a animação de flutuar. */
+}
+/* Define tamanhos e atrasos diferentes para cada uma das 10 bolhas, criando um efeito aleatório e orgânico. */
+.background-shapes li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+.background-shapes li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+.background-shapes li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+.background-shapes li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+.background-shapes li:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+.background-shapes li:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+.background-shapes li:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
+.background-shapes li:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
+.background-shapes li:nth-child(9) { left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
+.background-shapes li:nth-child(10) { left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
+
+/* A "receita" ou "roteiro" da animação das bolhas. */
+@keyframes float-up {
+    /* No início (0%), a bolha está embaixo, sem rotação e visível. */
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 0; }
+    /* No final (100%), a bolha subiu muito, girou 720 graus e desapareceu, tornando-se redonda. */
+    100% { transform: translateY(-120vh) rotate(720deg); opacity: 0; border-radius: 50%; }
+}
+
+/* Estilos especiais que são ativados quando a classe 'pokedex-complete' é adicionada ao body. */
+.pokedex-complete {
+    /* Muda o fundo para um gradiente radial brilhante. */
+    background: radial-gradient(circle, var(--unilavras-text) 0%, var(--unilavras-cyan) 150%);
+}
+.pokedex-complete h1 {
+    /* Muda a cor e a sombra do título para combinar com o novo fundo. */
+    color: var(--unilavras-dark-blue);
+    text-shadow: 1px 1px 2px var(--unilavras-cyan);
+}
+.pokedex-complete .card-front {
+    /* Escurece um pouco a frente dos cards para dar mais contraste. */
+    background-color: #03325a;
+}
+
+/* Estiliza o banner final de "Parabéns!". */
+#completion-banner {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.5); /* Começa no centro, pequeno. */
+    background-color: rgba(2, 29, 52, 0.95);
+    color: var(--unilavras-cyan);
+    padding: 40px 60px; border-radius: 20px; border: 5px solid var(--unilavras-cyan);
+    z-index: 10000; text-align: center;
+    opacity: 0; /* Começa invisível. */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+/* Quando o banner não deve ser visto, ele é completamente removido. */
+#completion-banner.hidden {
+    display: none;
+}
+/* Quando a classe 'pokedex-complete' é ativada, o banner se torna visível e cresce. */
+.pokedex-complete #completion-banner {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+#completion-banner .unilavras-logo {
+    height: 80px; width: auto; margin-bottom: 20px;
+}
+#completion-banner h1 {
+    font-size: 4em; margin: 0; color: var(--unilavras-text);
+}
+#completion-banner p {
+    font-size: 1.5em; margin: 10px 0 0; color: var(--unilavras-text);
+}
+#close-banner-button {
+    background-color: var(--unilavras-cyan); color: var(--unilavras-dark-blue);
+    border: none; padding: 10px 20px; border-radius: 8px; font-size: 1.2em;
+    cursor: pointer; margin-top: 20px; transition: background-color 0.3s ease;
+}
+#close-banner-button:hover {
+    background-color: #007ab3;
+}
+
+/* Animação de "onda" que passa pelos cards na celebração final. */
+.wave-animate .card-inner {
+    /* Aplica a animação 'card-wave' definida abaixo. */
+    animation: card-wave 0.8s ease-in-out;
+}
+/* A "receita" da animação de onda: um pulso que aumenta e diminui o card. */
+@keyframes card-wave {
+    /* Na metade da animação, o card fica um pouco maior e com uma sombra brilhante. */
+    50% {
+        transform: scale(1.15) rotateY(180deg);
+        box-shadow: 0 0 20px var(--unilavras-cyan);
+    }
+}
+
+/* --- SEÇÃO 7: RESPONSIVIDADE PARA DISPOSITIVOS MÓVEIS --- */
+
+/* Estilos aplicados quando a tela tem no máximo 768px de largura (tablets e celulares deitados). */
+@media (max-width: 768px) {
+    /* Diminui o espaçamento geral nas bordas da página. */
+    body {
+        padding: 10px;
+    }
+
+    /* Reduz o tamanho do título principal para caber melhor. */
+    h1 {
+        font-size: 1.8em;
+    }
+
+    /* Reduz o tamanho do contador de Pokémon. */
+    #pokedex-counter {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+    }
+
+    /* Ajusta a grade para telas menores. */
+    #pokedex-grid {
+        /* Um espaçamento fixo pode ser mais previsível que um relativo (vw) em telas menores. */
+        gap: 8px;
+        /* Reajusta a altura mínima para o novo tamanho dos títulos. */
+        min-height: calc(100vh - 160px);
+    }
+
+    /* Diminui o nome do Pokémon dentro do card para evitar quebra de linha. */
+    .pokemon-name {
+        font-size: 0.7em;
+    }
+}
+
+/* Estilos aplicados quando a tela tem no máximo 480px de largura (celulares em pé). */
+@media (max-width: 480px) {
+    /* Diminui ainda mais o título principal. */
+    h1 {
+        font-size: 1.5em;
+    }
+
+    /* Aproxima os botões de controle do canto. */
+    .corner-controls {
+        bottom: 10px;
+        right: 10px;
+    }
+
+    /* Diminui o tamanho dos botões redondos de controle. */
+    .corner-controls button {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    
+    /* Permite que os cards fiquem um pouco menores para caber mais colunas. */
+    #pokedex-grid {
+       grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    }
+}

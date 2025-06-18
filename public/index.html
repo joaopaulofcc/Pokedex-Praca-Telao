@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokédex Comunitária - Unilavras na Praça</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="start-overlay">
+        <button id="start-button">Iniciar Experiência</button>
+    </div>
+    <div class="background-shapes">
+        <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+    </div>
+
+    <div id="completion-banner" class="hidden">
+        <img src="https://i.ibb.co/ccT86Nrc/Logo-Unilavras-Oficial-2019-mono-full-white.png" alt="Logo Unilavras" class="unilavras-logo">
+        <h1>Pokédex Completa!</h1>
+        <p>Parabéns, Treinadores! Uma conquista para os 60 Anos do Unilavras!</p>
+        <button id="close-banner-button">Fechar</button>
+    </div>
+
+    <div class="test-controls">
+      <button id="test-new">Testar Nova Captura</button>
+      <button id="test-duplicate">Testar Captura Repetida</button>
+      <button id="test-reset" class="danger">Zerar Pokédex</button>
+      <button id="test-complete" class="success">Completar Pokédex</button>
+    </div>
+    
+    <div class="corner-controls">
+        <button id="toggle-scroll-button"></button>
+        <button id="mute-button"></button>
+        <button id="toggle-test-mode">⚙️</button>
+    </div>
+
+    <h1>Pokédex Comunitária: Unilavras na Praça 60 Anos</h1>
+
+    <div id="pokedex-counter">
+        Pokémon Capturados: 
+        <span id="captured-count">0</span> / <span id="total-count">151</span>
+    </div>
+
+    <div id="pokedex-grid"></div>
+
+    <template id="card-template">
+        <div class="pokemon-card" data-id="">
+            <div class="card-inner">
+                <div class="card-front">
+                    <span class="pokemon-id"></span>
+                    <img src="" class="pokemon-silhouette" alt="Silhueta do Pokémon">
+                </div>
+                <div class="card-back">
+                    <img src="" class="pokemon-img" alt="Imagem do Pokémon">
+                    <p class="pokemon-name"></p> 
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
